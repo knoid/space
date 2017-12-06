@@ -38,7 +38,13 @@ module.exports = {
     ],
   },
   plugins: [
-    new optimize.UglifyJsPlugin(),
+    new optimize.UglifyJsPlugin({
+      compress: {
+        drop_console: true,
+        warnings: !isProd,
+      },
+      sourceMap: true,
+    }),
     new HtmlWebpackPlugin({template: './src/index.html'}),
   ],
 };
