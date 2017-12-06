@@ -30,8 +30,8 @@ export default class Controls {
     this.domElement = domElement || window;
     this.viewPort = {width: 0, height: 0};
 
-    this._x = 0;
-    this._y = 0;
+    this._x = 0.5;
+    this._y = 0.5;
 
     window.addEventListener('mousemove', this.onMouseMove.bind(this), false);
     window.addEventListener('resize', this.onResize.bind(this), false);
