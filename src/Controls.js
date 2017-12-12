@@ -1,20 +1,7 @@
-/**
- * Creates a function that returns values between bounds.
- * @param {number} min
- * @param {number} max
- * @return {range~between}
- */
-function range(min, max) {
-  /**
-   * @param {number} value
-   * @return {number}
-   */
-  return function between(value) {
-    return min + (1 - value) * (max - min);
-  };
-}
+import * as THREE from 'three';
 
-const rotation = range(-Math.PI / 6, Math.PI / 6);
+const maxAngle = Math.PI / 6;
+const rotation = THREE.Math.lerp.bind(null, maxAngle, -maxAngle);
 
 /**
  * Manages mouse controls
