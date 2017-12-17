@@ -4,6 +4,8 @@ env:
 extends:
   - eslint:recommended
   - google
+globals:
+  THREE: false
 parserOptions:
   ecmaVersion: 6
   sourceType: module

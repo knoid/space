@@ -1,6 +1,6 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const {optimize} = require('webpack');
 const path = require('path');
+const webpack = require('webpack');
 
 const isProd = process.env.NODE_ENV === 'production';
 
@@ -38,7 +38,10 @@ module.exports = {
     ],
   },
   plugins: [
-    new optimize.UglifyJsPlugin({
+    new webpack.ProvidePlugin({
+      THREE: 'three',
+    }),
+    new webpack.optimize.UglifyJsPlugin({
       compress: {
         drop_console: true,
         warnings: !isProd,
