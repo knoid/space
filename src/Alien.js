@@ -1,3 +1,6 @@
+const defaultColor = new THREE.Color(0x1fd017);
+const diffColors = 6;
+
 /**
  * Alien
  */
@@ -9,9 +12,7 @@ export default class Alien extends THREE.Group {
   constructor(data) {
     super();
 
-    const material = new THREE.MeshBasicMaterial({
-      color: 0x00ff00, side: THREE.DoubleSide,
-    });
+    this.material = new THREE.MeshBasicMaterial({color: defaultColor.clone()});
 
     const geometries = {};
 
@@ -26,7 +27,7 @@ export default class Alien extends THREE.Group {
           if (!geometries[width]) {
             geometries[width] = new THREE.PlaneGeometry(width);
           }
-          const plane = new THREE.Mesh(geometries[width], material);
+          const plane = new THREE.Mesh(geometries[width], this.material);
 
           plane.position.y = -row;
           plane.position.x = i + width / 2;
@@ -40,11 +41,14 @@ export default class Alien extends THREE.Group {
   }
 
   /**
-   * Find new values for X and Y.
+   * Find new values for X and Y and color.
    */
   reposition() {
-    this.position.x = Math.round(-20 + Math.random() * 40) * 13;
-    this.position.y = Math.round(-20 + Math.random() * 40) * 8;
+    const hue = THREE.Math.randInt(0, diffColors) / diffColors;
+    this.material.color.offsetHSL(hue, 0, 0);
+
+    this.position.x = THREE.Math.randInt(-20, 20) * 13;
+    this.position.y = THREE.Math.randInt(-20, 20) * 8;
   }
 
   /**
@@ -52,7 +56,7 @@ export default class Alien extends THREE.Group {
    * @param {number} timeDiff
    */
   animate(timeDiff) {
-    const newZ = this.position.z + timeDiff * 50;
+    const newZ = this.position.z + timeDiff * 75;
 
     if (newZ > 0) {
       this.reposition();
