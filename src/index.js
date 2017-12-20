@@ -7,8 +7,10 @@ import 'three/examples/js/shaders/FXAAShader';
 import Controls from './Controls';
 import Alien from './Alien';
 import aliensData from './data';
+import Stats from 'stats.js';
 
 const aliens = [];
+const isMobile = 'ontouchstart' in window;
 
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, 1, 0.1, 1000);
@@ -32,6 +34,10 @@ composer.addPass(outlinePass);
 const effectFXAA = new THREE.ShaderPass(THREE.FXAAShader);
 effectFXAA.renderToScreen = true;
 composer.addPass(effectFXAA);
+if (!isMobile) {
+  const stats = new Stats();
+  document.body.appendChild(stats.dom);
+}
 
 /**
  * Updates canvas and camera to match new window resolution.
@@ -100,6 +106,7 @@ function animate() {
   composer.render();
 
   time = newTime;
+  stats.update();
 }
 
 animate();
