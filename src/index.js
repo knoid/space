@@ -2,6 +2,7 @@ import AlienCreator from './AlienCreator';
 import Controls from './Controls';
 import Stats from 'stats.js';
 import Scene from './Scene';
+import Shooter from './Shooter';
 import env from './env';
 
 /**
@@ -20,6 +21,7 @@ if (!env.isMobile) {
   scene.add(new Controls(camera));
 }
 scene.add(new AlienCreator());
+scene.add(new Shooter());
 
 if (!env.isMobile) {
   const stats = new Stats();
