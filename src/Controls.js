@@ -49,7 +49,7 @@ export default class Controls {
   /**
    * Updates camera rotation.
    */
-  update() {
+  animate() {
     this.camera.rotation.x = rotation(this._x);
     this.camera.rotation.y = rotation(this._y);
   }
