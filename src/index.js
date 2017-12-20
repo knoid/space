@@ -1,9 +1,3 @@
-import 'three/examples/js/postprocessing/EffectComposer';
-import 'three/examples/js/postprocessing/OutlinePass';
-import 'three/examples/js/postprocessing/RenderPass';
-import 'three/examples/js/postprocessing/ShaderPass';
-import 'three/examples/js/shaders/CopyShader';
-import 'three/examples/js/shaders/FXAAShader';
 import Controls from './Controls';
 import Alien from './Alien';
 import aliensData from './data';
@@ -18,22 +12,9 @@ const controls = new Controls(camera);
 
 const renderer = new THREE.WebGLRenderer({antialias: true});
 
-// post processing
-const composer = new THREE.EffectComposer(renderer);
 
-const renderPass = new THREE.RenderPass(scene, camera);
-composer.addPass(renderPass);
 
-const windowSize = new THREE.Vector2(window.innerWidth, window.innerHeight);
-const outlinePass = new THREE.OutlinePass(windowSize, scene, camera);
-outlinePass.edgeStrength = 1;
-outlinePass.pulsePeriod = 2;
-outlinePass.visibleEdgeColor.set(0xa5ff00);
-composer.addPass(outlinePass);
 
-const effectFXAA = new THREE.ShaderPass(THREE.FXAAShader);
-effectFXAA.renderToScreen = true;
-composer.addPass(effectFXAA);
 if (!isMobile) {
   const stats = new Stats();
   document.body.appendChild(stats.dom);
@@ -46,12 +27,9 @@ function onWindowResize() {
   const {innerWidth, innerHeight} = window;
 
   renderer.setSize(innerWidth, innerHeight);
-  composer.setSize(innerWidth, innerHeight);
 
   camera.aspect = innerWidth / innerHeight;
   camera.updateProjectionMatrix();
-
-  effectFXAA.uniforms.resolution.value.set(1 / innerWidth, 1 / innerHeight);
 }
 
 window.addEventListener('resize', onWindowResize, false);
@@ -82,8 +60,6 @@ for (let i = 0; i < 100; i++) {
   createAlien();
 }
 
-outlinePass.selectedObjects = aliens.slice(0, aliens.length / 10)
-  .reduce((a, b) => a.concat(b.children), []);
 let time = new Date();
 
 /**
@@ -103,9 +79,9 @@ function animate() {
   cube.rotation.y += timeDiff;
 
   controls.update();
-  composer.render();
 
   time = newTime;
+  renderer.render(scene, camera);
   stats.update();
 }
 
