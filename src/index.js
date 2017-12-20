@@ -23,8 +23,9 @@ if (!env.isMobile) {
 scene.add(new AlienCreator());
 scene.add(new Shooter());
 
+let stats;
 if (!env.isMobile) {
-  const stats = new Stats();
+  stats = new Stats();
   document.body.appendChild(stats.dom);
 }
 
@@ -54,7 +55,9 @@ function animate() {
 
   scene.animate();
   renderer.render(scene, camera);
-  stats.update();
+  if (stats) {
+    stats.update();
+  }
 }
 
 animate();
