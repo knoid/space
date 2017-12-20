@@ -5,6 +5,13 @@ import Stats from 'stats.js';
 import env from './env';
 
 const aliens = [];
+/**
+ * Helper function to prevent default behavour from any event.
+ * @param {Event} e
+ */
+function preventDefault(e) {
+  e.preventDefault();
+}
 
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, 1, 0.1, 1000);
@@ -61,6 +68,7 @@ for (let i = 0; i < 100; i++) {
 }
 
 let time = new Date();
+renderer.domElement.addEventListener('touchstart', preventDefault, false);
 
 /**
  * Animates next frame
