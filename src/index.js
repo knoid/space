@@ -2,9 +2,9 @@ import Controls from './Controls';
 import Alien from './Alien';
 import aliensData from './data';
 import Stats from 'stats.js';
+import env from './env';
 
 const aliens = [];
-const isMobile = 'ontouchstart' in window;
 
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, 1, 0.1, 1000);
@@ -15,7 +15,7 @@ const renderer = new THREE.WebGLRenderer({antialias: true});
 
 
 
-if (!isMobile) {
+if (!env.isMobile) {
   const stats = new Stats();
   document.body.appendChild(stats.dom);
 }
