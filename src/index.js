@@ -3,7 +3,7 @@ import Controls from './Controls';
 import Stats from 'stats.js';
 import Scene from './Scene';
 import Shooter from './Shooter';
-import env from './env';
+import * as env from './env';
 
 /**
  * Helper function to prevent default behavour from any event.

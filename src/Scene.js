@@ -1,5 +1,3 @@
-import * as THREE from 'three';
-
 /**
  * Custom scene that calls animate on each child.
  */

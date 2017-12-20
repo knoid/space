@@ -1,4 +1,4 @@
-import env from './env';
+import * as env from './env';
 
 const maxAngle = Math.PI / 6;
 const rotation = THREE.Math.lerp.bind(null, maxAngle, -maxAngle);
