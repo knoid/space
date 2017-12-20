@@ -28,6 +28,10 @@ export default class Shooter extends THREE.Group {
     window.addEventListener('keyup', this.onKeyUp, false);
   }
 
+  /**
+   * onKeyDown
+   * @param {Event} e
+   */
   onKeyDown(e) {
     // SPACE pressed
     if (e.keyCode === 32) {
@@ -35,6 +39,10 @@ export default class Shooter extends THREE.Group {
     }
   }
 
+  /**
+   * onKeyUp
+   * @param {Event} e
+   */
   onKeyUp(e) {
     // SPACE pressed
     if (e.keyCode === 32) {
@@ -42,15 +50,27 @@ export default class Shooter extends THREE.Group {
     }
   }
 
+  /**
+   * onStart
+   * @param {Event} e
+   */
   onStart(e) {
     this.updateMouseEvent(e);
     this.shooting = true;
   }
 
+  /**
+   * onMove
+   * @param {Event} e
+   */
   onMove(e) {
     this.updateMouseEvent(e);
   }
 
+  /**
+   * onEnd
+   * @param {Event} e
+   */
   onEnd(e) {
     this.shooting = false;
   }
