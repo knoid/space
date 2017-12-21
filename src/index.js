@@ -13,15 +13,16 @@ function preventDefault(e) {
   e.preventDefault();
 }
 
-const scene = new Scene();
+const world = new CANNON.World();
+const scene = new Scene(world);
 const camera = new THREE.PerspectiveCamera(75, 1, 0.1, 1000);
 const renderer = new THREE.WebGLRenderer({antialias: true});
 
 if (!env.isMobile) {
   scene.add(new Controls(camera));
 }
-scene.add(new AlienCreator());
-scene.add(new Shooter());
+scene.add(new AlienCreator(world));
+scene.add(new Shooter(world));
 
 let stats;
 if (!env.isMobile) {

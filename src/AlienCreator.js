@@ -7,14 +7,22 @@ import Scene from './Scene';
  */
 export default class AlienCreator extends Scene {
   /**
+   * Constructor
+   * @param {CANNON.World} world
+   */
+  constructor(world) {
+    super();
+    this.world = world;
+  }
+
+  /**
    * Creates aliens if FPS allows it.
    * @param {number} timeDiff
    */
   animate(timeDiff) {
     if (timeDiff * 60 < 1 && this.children.length < 100) {
       const data = aliensData[Math.floor(Math.random() * aliensData.length)];
-      const alien = new Alien(data);
-      alien.position.z = -3000 + 1000 * Math.random();
+      const alien = new Alien(this.world, data);
       this.add(alien);
     }
     super.animate(timeDiff);

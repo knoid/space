@@ -1,16 +1,22 @@
+import {settings} from './env';
+
+const origin = new THREE.Vector3();
+
 /**
  * Manages all Shooter related things.
  */
 export default class Shooter extends THREE.Group {
   /**
    * Adds event listenrs to shoot.
+   * @param {CANNON.World} world
    */
-  constructor() {
+  constructor(world) {
     super();
 
     this.lastShot = Date.now();
     this.mouseEvent = null;
     this.shooting = false;
+    this.world = world;
 
     this.onStart = this.onStart.bind(this);
     this.onMove = this.onMove.bind(this);
@@ -91,17 +97,25 @@ export default class Shooter extends THREE.Group {
    * @param {Event} event
    */
   shoot(event) {
-    const geometry = new THREE.SphereGeometry(5, 8, 8);
+    const radius = settings.ball.radius;
+    const geometry = new THREE.SphereGeometry(radius, 8, 8);
     const material = new THREE.MeshBasicMaterial({color: 0xffffff});
     const sphere = new THREE.Mesh(geometry, material);
 
-    const velocity = new THREE.Vector3();
+    const velocity = new CANNON.Vec3();
     velocity.x = (event.clientX / window.innerWidth) * 2 - 1;
     velocity.y = -(event.clientY / window.innerHeight) * 2 + 1;
     velocity.z = -1;
+    velocity.normalize();
 
-    sphere.userData.velocity = velocity.normalize();
-    sphere.position.y = -10;
+    const body = new CANNON.Body({
+       mass: settings.ball.mass, // kg
+       position: new CANNON.Vec3(0, -10, 0), // m
+       shape: new CANNON.Sphere(radius),
+       velocity: velocity.scale(500),
+    });
+    this.world.addBody(body);
+    sphere.userData.body = body;
 
     this.add(sphere);
   }
@@ -112,16 +126,18 @@ export default class Shooter extends THREE.Group {
    */
   animate(timeDiff) {
     const now = Date.now();
-    if (this.shooting && now - this.lastShot > 150) {
+    if (this.shooting && now - this.lastShot > settings.ball.delay) {
       this.shoot(this.mouseEvent);
       this.lastShot = now;
     }
 
     this.children.forEach((ball) => {
-      const velocity = ball.userData.velocity.clone();
-      ball.position.add(velocity.multiplyScalar(timeDiff * 1000));
-      if (ball.position.z < -1000) {
+      const {body} = ball.userData;
+      ball.position.copy(body.position);
+      ball.quaternion.copy(body.quaternion);
+      if (ball.position.distanceTo(origin) > 1000) {
         this.remove(ball);
+        this.world.removeBody(body);
       }
     });
   }

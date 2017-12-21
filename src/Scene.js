@@ -4,12 +4,14 @@
 export default class Scene extends THREE.Scene {
   /**
    * Initializes variables.
+   * @param {CANNON.World} world
    */
-  constructor() {
+  constructor(world) {
     super();
 
     this._lastTime = new Date();
     this.animatable = [];
+    this.world = world;
   }
 
   /**
@@ -48,6 +50,7 @@ export default class Scene extends THREE.Scene {
       this._lastTime = newTime;
     }
 
+    this.world.step(1 / 60, timeDiff);
     this.animatable.forEach((c) => {
       c.animate(timeDiff);
     });

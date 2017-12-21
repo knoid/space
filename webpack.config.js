@@ -39,6 +39,7 @@ module.exports = {
   },
   plugins: [
     new webpack.ProvidePlugin({
+      CANNON: 'cannon',
       THREE: 'three',
     }),
     new webpack.optimize.UglifyJsPlugin({

@@ -5,6 +5,7 @@ extends:
   - eslint:recommended
   - google
 globals:
+  CANNON: false
   THREE: false
 parserOptions:
   ecmaVersion: 6
