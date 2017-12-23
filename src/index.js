@@ -5,14 +5,6 @@ import Scene from './Scene';
 import Shooter from './Shooter';
 import * as env from './env';
 
-/**
- * Helper function to prevent default behavour from any event.
- * @param {Event} e
- */
-function preventDefault(e) {
-  e.preventDefault();
-}
-
 const world = new CANNON.World();
 const scene = new Scene(world);
 const camera = new THREE.PerspectiveCamera(75, 1, 0.1, 1000);
@@ -46,7 +38,6 @@ window.addEventListener('resize', onWindowResize, false);
 
 onWindowResize();
 document.body.appendChild(renderer.domElement);
-renderer.domElement.addEventListener('touchstart', preventDefault, false);
 
 /**
  * Animates next frame
