@@ -49,18 +49,28 @@ export default class Alien extends THREE.Group {
       mass: 1,
       shape: new CANNON.Box(new CANNON.Vec3(width / 2, height / 2, .5)),
     });
+    this.body.addEventListener('collide', this.onCollition.bind(this));
     world.addBody(this.body);
 
     this.reposition();
   }
 
   /**
+   * Starts the removal process.
+   * @param {CANNON.Event} e
+   */
+  onCollition(e) {
+    this.mayBeDying = true;
+  }
+
+  /**
    * Find new values for X and Y and color.
    */
   reposition() {
+    this.dying = false;
+    this.mayBeDying = false;
+
     const colorNumber = THREE.Math.randInt(0, diffColors);
-    const hue = colorNumber / diffColors;
-    this.material.color.offsetHSL(hue, 0, 0);
 
     this.body.mass = 10 * (colorNumber + 1);
     this.body.updateMassProperties();
@@ -75,6 +85,10 @@ export default class Alien extends THREE.Group {
     this.body.quaternion.setFromAxisAngle(new CANNON.Vec3(1, 0, 0), 0);
 
     this.body.velocity.set(0, 0, 75);
+
+    this.material.color.offsetHSL(colorNumber / diffColors, 0, 0);
+    this.material.transparent = false;
+    this.material.opacity = 1;
   }
 
   /**
@@ -82,11 +96,24 @@ export default class Alien extends THREE.Group {
    * @param {number} timeDiff
    */
   animate(timeDiff) {
-    this.position.copy(this.body.position);
-    this.quaternion.copy(this.body.quaternion);
+    if (this.mayBeDying && this.body.angularVelocity.length() > 0) {
+      this.dying = true;
+      this.mayBeDying = false;
+      this.material.transparent = true;
+    }
+
+    if (this.dying) {
+      this.material.opacity -= timeDiff;
+      if (this.material.opacity <= 0) {
+        this.reposition();
+      }
+    }
 
     if (this.position.z > 0) {
       this.reposition();
     }
+
+    this.position.copy(this.body.position);
+    this.quaternion.copy(this.body.quaternion);
   }
 }
