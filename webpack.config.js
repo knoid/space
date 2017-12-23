@@ -49,6 +49,10 @@ module.exports = {
       },
       sourceMap: true,
     }),
-    new HtmlWebpackPlugin({template: './src/index.html'}),
+    new HtmlWebpackPlugin({
+      googleAnalytics: process.env.GA_TRACKING_ID,
+      template: './src/index.ejs',
+      title: '3D Space Invation',
+    }),
   ],
 };

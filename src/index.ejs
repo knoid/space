@@ -1,0 +1,27 @@
+<!DOCTYPE html><% const options = htmlWebpackPlugin.options %>
+<html>
+	<head>
+		<meta charset="utf-8">
+
+		<% if (options.googleAnalytics) { %>
+		<!-- Global site tag (gtag.js) - Google Analytics -->
+		<script async src="https://www.googletagmanager.com/gtag/js?id=<%= options.googleAnalytics %>"></script>
+		<script>
+		  window.dataLayer = window.dataLayer || [];
+		  function gtag(){dataLayer.push(arguments);}
+		  gtag('js', new Date());
+		  gtag('config', <%= JSON.stringify(options.googleAnalytics) %>);
+		</script>
+		<% } %>
+
+		<title><%= options.title %></title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+		<style>
+			* { margin: 0; padding: 0; }
+			html, body { overflow: hidden; }
+			canvas { width: 100%; height: 100%; touch-action: none; }
+		</style>
+	</head>
+	<body>
+	</body>
+</html>
