@@ -8,7 +8,7 @@ const origin = new THREE.Vector3();
  */
 export default class Ball extends THREE.Mesh {
   /**
-   * Creates a new proyectile with the given velocity.
+   * Creates a new projectile with the given velocity.
    * @param {CANNON.World} world
    * @param {Scene} scene
    * @param {CANNON.Vec3} velocity
