@@ -1,11 +1,11 @@
+import Ball from './Ball';
+import Scene from './Scene';
 import {settings} from './env';
-
-const origin = new THREE.Vector3();
 
 /**
  * Manages all Shooter related things.
  */
-export default class Shooter extends THREE.Group {
+export default class Shooter extends Scene {
   /**
    * Adds event listenrs to shoot.
    * @param {CANNON.World} world
@@ -97,48 +97,25 @@ export default class Shooter extends THREE.Group {
    * @param {Event} event
    */
   shoot(event) {
-    const radius = settings.ball.radius;
-    const geometry = new THREE.SphereGeometry(radius, 8, 8);
-    const material = new THREE.MeshBasicMaterial({color: 0xffffff});
-    const sphere = new THREE.Mesh(geometry, material);
-
     const velocity = new CANNON.Vec3();
     velocity.x = (event.clientX / window.innerWidth) * 2 - 1;
     velocity.y = -(event.clientY / window.innerHeight) * 2 + 1;
     velocity.z = -1;
-    velocity.normalize();
 
-    const body = new CANNON.Body({
-       mass: settings.ball.mass, // kg
-       position: new CANNON.Vec3(0, -10, 0), // m
-       shape: new CANNON.Sphere(radius),
-       velocity: velocity.scale(500),
-    });
-    this.world.addBody(body);
-    sphere.userData.body = body;
-
-    this.add(sphere);
+    this.add(new Ball(this.world, this, velocity));
   }
 
   /**
    * Animates every ball in scene.
    * @param {number} timeDiff
+   * @param {number} now
    */
-  animate(timeDiff) {
-    const now = Date.now();
+  animate(timeDiff, now) {
     if (this.shooting && now - this.lastShot > settings.ball.delay) {
       this.shoot(this.mouseEvent);
       this.lastShot = now;
     }
 
-    this.children.forEach((ball) => {
-      const {body} = ball.userData;
-      ball.position.copy(body.position);
-      ball.quaternion.copy(body.quaternion);
-      if (ball.position.distanceTo(origin) > 1000) {
-        this.remove(ball);
-        this.world.removeBody(body);
-      }
-    });
+    super.animate(timeDiff, now);
   }
 }

@@ -49,6 +49,7 @@ export default class Alien extends THREE.Group {
       mass: 1,
       shape: new CANNON.Box(new CANNON.Vec3(width / 2, height / 2, .5)),
     });
+    this.body._self = this;
     this.body.addEventListener('collide', this.onCollition.bind(this));
     world.addBody(this.body);
 
@@ -60,7 +61,7 @@ export default class Alien extends THREE.Group {
    * @param {CANNON.Event} e
    */
   onCollition(e) {
-    this.mayBeDying = true;
+    this.possibleHit = e;
   }
 
   /**
@@ -68,7 +69,7 @@ export default class Alien extends THREE.Group {
    */
   reposition() {
     this.dying = false;
-    this.mayBeDying = false;
+    this.possibleHit = null;
 
     const colorNumber = THREE.Math.randInt(0, diffColors);
 
@@ -96,9 +97,9 @@ export default class Alien extends THREE.Group {
    * @param {number} timeDiff
    */
   animate(timeDiff) {
-    if (this.mayBeDying && this.body.angularVelocity.length() > 0) {
+    if (this.possibleHit && this.body.angularVelocity.length() > 0) {
       this.dying = true;
-      this.mayBeDying = false;
+      this.possibleHit = null;
       this.material.transparent = true;
     }
 

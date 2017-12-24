@@ -42,8 +42,9 @@ export default class Scene extends THREE.Scene {
   /**
    * Calculates time difference between frames and calls animate on each child.
    * @param {number?} timeDiff
+   * @param {number} now
    */
-  animate(timeDiff) {
+  animate(timeDiff, now = Date.now()) {
     if (!timeDiff) {
       const newTime = new Date();
       timeDiff = (newTime - this._lastTime) / 1000;
@@ -52,7 +53,7 @@ export default class Scene extends THREE.Scene {
 
     this.world.step(1 / 60, timeDiff);
     this.animatable.forEach((c) => {
-      c.animate(timeDiff);
+      c.animate(timeDiff, now);
     });
   }
 }
