@@ -1,4 +1,5 @@
 import typeface from 'three/examples/fonts/helvetiker_bold.typeface.json';
+import {addPoints} from './state';
 
 const cache = {};
 const font = new THREE.Font(typeface);
@@ -41,6 +42,7 @@ export default class Points extends THREE.Group {
     this.mesh.position.y = 10;
 
     this.add(this.mesh);
+    addPoints(hits * 10);
   }
 
   /**
