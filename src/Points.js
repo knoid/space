@@ -47,10 +47,10 @@ export default class Points extends THREE.Group {
 
   /**
    * animate
-   * @param {number} timeDiff
+   * @param {number} delta
    */
-  animate(timeDiff) {
-    this.mesh.position.y += 10 * timeDiff;
+  animate(delta) {
+    this.mesh.position.y += 10 * delta;
     if (this.mesh.position.y > 20) {
       this.destroy();
     }

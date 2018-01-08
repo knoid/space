@@ -17,14 +17,14 @@ export default class AlienCreator extends Scene {
 
   /**
    * Creates aliens if FPS allows it.
-   * @param {number} timeDiff
+   * @param {number} delta
    */
-  animate(timeDiff) {
-    if (timeDiff * 60 < 1 && this.children.length < 100) {
+  animate(delta) {
+    if (delta * 60 < 1 && this.children.length < 100) {
       const data = aliensData[Math.floor(Math.random() * aliensData.length)];
       const alien = new Alien(this.world, data);
       this.add(alien);
     }
-    super.animate(timeDiff);
+    super.animate(delta);
   }
 }

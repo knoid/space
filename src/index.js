@@ -5,6 +5,7 @@ import Scene from './Scene';
 import Shooter from './Shooter';
 import * as env from './env';
 
+const clock = new THREE.Clock();
 const world = new CANNON.World();
 const scene = new Scene(world);
 const camera = new THREE.PerspectiveCamera(75, 1, 0.1, 1000);
@@ -45,7 +46,7 @@ document.body.appendChild(renderer.domElement);
 function animate() {
   requestAnimationFrame(animate);
 
-  scene.animate();
+  scene.animate(clock.getDelta(), clock);
   renderer.render(scene, camera);
   if (stats) {
     stats.update();

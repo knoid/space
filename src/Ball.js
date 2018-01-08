@@ -40,9 +40,8 @@ export default class Ball extends THREE.Mesh {
 
   /**
    * animate
-   * @param {number} timeDiff
    */
-  animate(timeDiff) {
+  animate() {
     if (this.possibleHit) {
       if (this.possibleHit.body.angularVelocity.length() > 0) {
         this.hits += 1;

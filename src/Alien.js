@@ -94,9 +94,9 @@ export default class Alien extends THREE.Group {
 
   /**
    * Gets called on each frame.
-   * @param {number} timeDiff
+   * @param {number} delta
    */
-  animate(timeDiff) {
+  animate(delta) {
     if (this.possibleHit && this.body.angularVelocity.length() > 0) {
       this.dying = true;
       this.possibleHit = null;
@@ -104,7 +104,7 @@ export default class Alien extends THREE.Group {
     }
 
     if (this.dying) {
-      this.material.opacity -= timeDiff;
+      this.material.opacity -= delta;
       if (this.material.opacity <= 0) {
         this.reposition();
       }

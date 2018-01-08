@@ -13,7 +13,7 @@ export default class Shooter extends Scene {
   constructor(world) {
     super();
 
-    this.lastShot = Date.now();
+    this.lastShot = 0;
     this.mouseEvent = null;
     this.shooting = false;
     this.world = world;
@@ -107,15 +107,16 @@ export default class Shooter extends Scene {
 
   /**
    * Animates every ball in scene.
-   * @param {number} timeDiff
-   * @param {number} now
+   * @param {number} delta
+   * @param {THREE.Clock} clock
    */
-  animate(timeDiff, now) {
+  animate(delta, clock) {
+    const now = clock.elapsedTime;
     if (this.shooting && now - this.lastShot > settings.ball.delay) {
       this.shoot(this.mouseEvent);
       this.lastShot = now;
     }
 
-    super.animate(timeDiff, now);
+    super.animate(delta, clock);
   }
 }

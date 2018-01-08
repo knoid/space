@@ -9,7 +9,6 @@ export default class Scene extends THREE.Scene {
   constructor(world) {
     super();
 
-    this._lastTime = new Date();
     this.animatable = [];
     this.world = world;
   }
@@ -41,19 +40,13 @@ export default class Scene extends THREE.Scene {
 
   /**
    * Calculates time difference between frames and calls animate on each child.
-   * @param {number?} timeDiff
-   * @param {number} now
+   * @param {number} delta
+   * @param {THREE.Clock} clock
    */
-  animate(timeDiff, now = Date.now()) {
-    if (!timeDiff) {
-      const newTime = new Date();
-      timeDiff = (newTime - this._lastTime) / 1000;
-      this._lastTime = newTime;
-    }
-
-    this.world.step(1 / 60, timeDiff);
+  animate(delta, clock) {
+    this.world.step(1 / 60, delta);
     this.animatable.forEach((c) => {
-      c.animate(timeDiff, now);
+      c.animate(delta, clock);
     });
   }
 }
