@@ -7,7 +7,7 @@ import {settings} from './env';
  */
 export default class Shooter extends Scene {
   /**
-   * Adds event listenrs to shoot.
+   * Adds event listeners to shoot.
    * @param {CANNON.World} world
    */
   constructor(world) {

@@ -1,6 +1,7 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const path = require('path');
 const webpack = require('webpack');
+const TerserPlugin = require('terser-webpack-plugin');
 
 const isProd = process.env.NODE_ENV === 'production';
 
@@ -22,10 +23,9 @@ module.exports = {
         exclude: /node_modules/,
         options: {
           presets: [
-            ['env', {
+            ['@babel/env', {
               targets: {
                 browsers: 'last 2 versions',
-                uglify: true,
               },
             }],
           ],
@@ -37,22 +37,28 @@ module.exports = {
       },
     ],
   },
+  optimization: {
+    minimizer: [
+      new TerserPlugin({
+        terserOptions: {
+          compress: {
+            drop_console: true,
+            warnings: !isProd,
+          },
+          sourceMap: true,
+        },
+      }),
+    ],
+  },
   plugins: [
     new webpack.ProvidePlugin({
       CANNON: 'cannon',
       THREE: 'three',
     }),
-    new webpack.optimize.UglifyJsPlugin({
-      compress: {
-        drop_console: true,
-        warnings: !isProd,
-      },
-      sourceMap: true,
-    }),
     new HtmlWebpackPlugin({
       googleAnalytics: process.env.GA_TRACKING_ID,
       template: './src/index.ejs',
-      title: '3D Space Invation',
+      title: '3D Space Invasion',
     }),
   ],
 };

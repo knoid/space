@@ -77,9 +77,9 @@ export default class Alien extends THREE.Group {
     this.body.updateMassProperties();
 
     this.body.position.set(
-      THREE.Math.randInt(-20, 20) * 13,
-      THREE.Math.randInt(-20, 20) * 8,
-      -2000 + 1000 * Math.random()
+        THREE.Math.randInt(-20, 20) * 13,
+        THREE.Math.randInt(-20, 20) * 8,
+        -2000 + 1000 * Math.random()
     );
 
     this.body.angularVelocity.set(0, 0, 0);

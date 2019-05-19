@@ -23,10 +23,10 @@ export default class Ball extends THREE.Mesh {
 
     velocity.normalize();
     const body = new CANNON.Body({
-       mass: settings.ball.mass, // kg
-       position: new CANNON.Vec3(0, -10, 0), // m
-       shape: new CANNON.Sphere(radius),
-       velocity: velocity.scale(500),
+      mass: settings.ball.mass, // kg
+      position: new CANNON.Vec3(0, -10, 0), // m
+      shape: new CANNON.Sphere(radius),
+      velocity: velocity.scale(500),
     });
     world.addBody(body);
     body.addEventListener('collide', this.onCollition);
