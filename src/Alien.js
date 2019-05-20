@@ -1,3 +1,5 @@
+import {ALIENS, BALLS} from './collisionIds';
+
 const defaultColor = new THREE.Color(0x1fd017);
 const diffColors = 6;
 
@@ -8,7 +10,7 @@ export default class Alien extends THREE.Group {
   /**
    * Creates an alien from the data provided.
    * @param {CANNON.World} world
-   * @param {Array.<Array.<boolean>>} data
+   * @param {Array.<boolean[]>} data
    */
   constructor(world, data) {
     super();
@@ -46,11 +48,13 @@ export default class Alien extends THREE.Group {
     });
 
     this.body = new CANNON.Body({
+      collisionFilterGroup: ALIENS,
+      collisionFilterMask: BALLS,
       mass: 1,
       shape: new CANNON.Box(new CANNON.Vec3(width / 2, height / 2, .5)),
     });
     this.body._self = this;
-    this.body.addEventListener('collide', this.onCollition.bind(this));
+    this.body.addEventListener('collide', this.onCollision.bind(this));
     world.addBody(this.body);
 
     this.reposition();
@@ -60,7 +64,7 @@ export default class Alien extends THREE.Group {
    * Starts the removal process.
    * @param {CANNON.Event} e
    */
-  onCollition(e) {
+  onCollision(e) {
     this.possibleHit = e;
   }
 
@@ -84,6 +88,7 @@ export default class Alien extends THREE.Group {
 
     this.body.angularVelocity.set(0, 0, 0);
     this.body.quaternion.setFromAxisAngle(new CANNON.Vec3(1, 0, 0), 0);
+    this.quaternion.copy(this.body.quaternion);
 
     this.body.velocity.set(0, 0, 75);
 
@@ -105,6 +110,10 @@ export default class Alien extends THREE.Group {
 
     if (this.dying) {
       this.material.opacity -= delta;
+
+      // aliens only rotate when dying.
+      this.quaternion.copy(this.body.quaternion);
+
       if (this.material.opacity <= 0) {
         this.reposition();
       }
@@ -115,6 +124,5 @@ export default class Alien extends THREE.Group {
     }
 
     this.position.copy(this.body.position);
-    this.quaternion.copy(this.body.quaternion);
   }
 }

@@ -11,12 +11,11 @@ export default class Shooter extends Scene {
    * @param {CANNON.World} world
    */
   constructor(world) {
-    super();
+    super(world);
 
     this.lastShot = 0;
     this.mouseEvent = null;
     this.shooting = false;
-    this.world = world;
 
     this.onStart = this.onStart.bind(this);
     this.onMove = this.onMove.bind(this);

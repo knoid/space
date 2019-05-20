@@ -17,6 +17,10 @@ if (!env.isMobile) {
 scene.add(new AlienCreator(world));
 scene.add(new Shooter(world));
 
+// black fog makes aliens fade in.
+const fogColor = new THREE.Color('#000');
+scene.fog = new THREE.Fog(fogColor, 800, 1000);
+
 let stats;
 if (!env.isMobile) {
   stats = new Stats();

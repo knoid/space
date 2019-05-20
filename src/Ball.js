@@ -1,5 +1,6 @@
-import Points from './Points';
+import {BALLS, ALIENS} from './collisionIds';
 import {settings} from './env';
+import Points from './Points';
 
 const origin = new THREE.Vector3();
 
@@ -19,17 +20,20 @@ export default class Ball extends THREE.Mesh {
     const material = new THREE.MeshBasicMaterial({color: 0xffffff});
     super(geometry, material);
 
-    this.onCollition = this.onCollition.bind(this);
+    this.onCollision = this.onCollision.bind(this);
 
     velocity.normalize();
     const body = new CANNON.Body({
+      collisionFilterGroup: BALLS,
+      collisionFilterMask: ALIENS,
+      fixedRotation: true,
       mass: settings.ball.mass, // kg
       position: new CANNON.Vec3(0, -10, 0), // m
       shape: new CANNON.Sphere(radius),
       velocity: velocity.scale(500),
     });
     world.addBody(body);
-    body.addEventListener('collide', this.onCollition);
+    body.addEventListener('collide', this.onCollision);
 
     this.body = body;
     this.hits = 0;
@@ -65,16 +69,16 @@ export default class Ball extends THREE.Mesh {
    * destroy
    */
   destroy() {
-    this.body.removeEventListener('collide', this.onCollition);
+    this.body.removeEventListener('collide', this.onCollision);
     this.world.removeBody(this.body);
     this.scene.remove(this);
   }
 
   /**
-   * onCollition
+   * onCollision
    * @param {CANNON.Event} e
    */
-  onCollition(e) {
+  onCollision(e) {
     this.possibleHit = e.body._self;
   }
 }
