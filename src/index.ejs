@@ -20,19 +20,42 @@
 			* { margin: 0; padding: 0; }
 			html, body { overflow: hidden; }
 			canvas { width: 100%; height: 100%; touch-action: none; }
+			@keyframes fadein {
+				from { opacity: 0 }
+				to { opacity: 1 }
+			}
 			#points {
 				color: #fff;
 				font-family: monospace;
-				font-size: 30px;
+				font-size: 2em;
 				line-height: 3;
 				position: absolute;
 				text-align: center;
 				user-select: none;
 				width: 100%;
 			}
+			.help {
+				animation: fadein 0.5s 10s forwards;
+				bottom: 0;
+				color: #31ca38;
+				font-family: monospace;
+				font-size: 2em;
+				opacity: 0;
+				position: absolute;
+				text-align: center;
+				width: 100%;
+				padding-bottom: 20vh;
+				user-select: none;
+			}
 		</style>
 	</head>
 	<body>
 		<div id="points"></div>
+		<div class="help" id="help-desktop">
+			Press the spacebar or click to shoot!
+		</div>
+		<div class="help" id="help-mobile">
+			Press the screen to shoot!
+		</div>
 	</body>
 </html>

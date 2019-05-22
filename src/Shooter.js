@@ -1,6 +1,6 @@
 import Ball from './Ball';
 import Scene from './Scene';
-import {settings} from './env';
+import {isMobile, settings} from './env';
 
 /**
  * Manages all Shooter related things.
@@ -13,8 +13,12 @@ export default class Shooter extends Scene {
   constructor(world) {
     super(world);
 
+    this.help = null;
     this.lastShot = 0;
-    this.mouseEvent = null;
+    this.mouseEvent = {
+      clientX: window.innerWidth / 2,
+      clientY: window.innerHeight / 2,
+    };
     this.shooting = false;
 
     this.onStart = this.onStart.bind(this);
@@ -31,6 +35,8 @@ export default class Shooter extends Scene {
     window.addEventListener('touchend', this.onEnd, false);
     window.addEventListener('keydown', this.onKeyDown, false);
     window.addEventListener('keyup', this.onKeyUp, false);
+
+    this.setupHelp(isMobile ? 'mobile' : 'desktop');
   }
 
   /**
@@ -60,6 +66,11 @@ export default class Shooter extends Scene {
    * @param {Event} e
    */
   onStart(e) {
+    if (this.help) {
+      this.help.parentElement.removeChild(this.help);
+      this.help = null;
+    }
+
     this.updateMouseEvent(e);
     this.shooting = true;
   }
@@ -81,13 +92,16 @@ export default class Shooter extends Scene {
   }
 
   /**
-   * Saves the last mouse event for later.
-   * @param {Event} e
+   * Sets up help message for the appropriate controls.
+   * @param {string} env
    */
-  updateMouseEvent(e) {
-    const mouseEvent = e.changedTouches ? e.changedTouches[0] : e;
-    if (mouseEvent.clientX && mouseEvent.clientY) {
-      this.mouseEvent = mouseEvent;
+  setupHelp(env) {
+    for (const div of document.getElementsByClassName('help')) {
+      if (div.id.endsWith(env)) {
+        this.help = div;
+      } else {
+        div.parentElement.removeChild(div);
+      }
     }
   }
 
@@ -102,6 +116,17 @@ export default class Shooter extends Scene {
     velocity.z = -1;
 
     this.add(new Ball(this.world, this, velocity));
+  }
+
+  /**
+   * Saves the last mouse event for later.
+   * @param {Event} e
+   */
+  updateMouseEvent(e) {
+    const mouseEvent = e.changedTouches ? e.changedTouches[0] : e;
+    if (mouseEvent.clientX && mouseEvent.clientY) {
+      this.mouseEvent = mouseEvent;
+    }
   }
 
   /**
