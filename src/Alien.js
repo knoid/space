@@ -3,6 +3,7 @@ import {settings} from './env';
 
 const defaultColor = new THREE.Color(0x1fd017);
 const diffColors = 6;
+const geometries = {};
 
 /**
  * Alien
@@ -11,7 +12,7 @@ export default class Alien extends THREE.Group {
   /**
    * Creates an alien from the data provided.
    * @param {CANNON.World} world
-   * @param {Array.<boolean[]>} data
+   * @param {Array<number[]>} data
    */
   constructor(world, data) {
     super();
@@ -21,37 +22,40 @@ export default class Alien extends THREE.Group {
       side: THREE.DoubleSide,
     });
 
-    const geometries = {};
-    const width = data.reduce((width, line) => {
-      return Math.max(line.length, width);
-    }, 0);
+    const width = Math.max(...data.map((line) =>
+      line.reduce((accum, partWidth) => accum + partWidth, 0)
+    ));
     const height = data.length;
+    const weight = data.reduce((a1, line) =>
+      a1 + line.reduce((a2, partWidth, index) =>
+        a2 + (index % 2 ? 0 : partWidth), 0
+      ), 0
+    );
 
     data.forEach((line, row) => {
-      for (let i = 0, nextHole = 0, n = line.length; i < n; i = nextHole) {
-        nextHole = i + 1;
-        if (line[i]) {
-          while (line[nextHole] && nextHole < n) {
-            nextHole++;
+      let left = 0;
+      for (let i = 0, n = line.length; i < n; i++) {
+        const isAlienPart = i % 2;
+        const partWidth = line[i];
+        if (isAlienPart) {
+          if (!geometries[partWidth]) {
+            geometries[partWidth] = new THREE.PlaneGeometry(partWidth);
           }
-          const planeWidth = nextHole - i;
-          if (!geometries[planeWidth]) {
-            geometries[planeWidth] = new THREE.PlaneGeometry(planeWidth);
-          }
-          const plane = new THREE.Mesh(geometries[planeWidth], this.material);
+          const plane = new THREE.Mesh(geometries[partWidth], this.material);
 
           plane.position.y = height / 2 - row - 0.5;
-          plane.position.x = -width / 2 + i + planeWidth / 2;
+          plane.position.x = -width / 2 + left + partWidth / 2;
 
           this.add(plane);
         }
+        left += partWidth;
       }
     });
 
     this.body = new CANNON.Body({
       collisionFilterGroup: ALIENS,
       collisionFilterMask: BALLS,
-      mass: 1,
+      mass: weight / 10,
       shape: new CANNON.Box(new CANNON.Vec3(width / 2, height / 2, .5)),
     });
     this.body._self = this;
