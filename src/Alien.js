@@ -1,4 +1,5 @@
 import {ALIENS, BALLS} from './collisionIds';
+import {settings} from './env';
 
 const defaultColor = new THREE.Color(0x1fd017);
 const diffColors = 6;
@@ -56,6 +57,18 @@ export default class Alien extends THREE.Group {
     this.body._self = this;
     this.body.addEventListener('collide', this.onCollision.bind(this));
     world.addBody(this.body);
+
+    if (settings.debug) {
+      const material = new THREE.LineBasicMaterial({
+        color: new THREE.Color(0x00ff00),
+        linewidth: 2,
+      });
+      const geometry = new THREE.WireframeGeometry(
+          new THREE.PlaneGeometry(width, height)
+      );
+      const mesh = new THREE.LineSegments(geometry, material);
+      this.add(mesh);
+    }
 
     this.reposition();
   }

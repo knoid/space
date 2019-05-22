@@ -9,4 +9,5 @@ export const settings = {
     mass: Number(query.ball_mass) || 0.5,
     radius: Number(query.ball_radius) || 5,
   },
+  debug: !!query.debug || false,
 };
