@@ -1,5 +1,7 @@
 # Play now!
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/knoid/space.svg)](https://greenkeeper.io/)
+
 https://knoid.github.io/space/
 
 ## Customizing the game
