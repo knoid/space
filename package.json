@@ -23,7 +23,7 @@
   },
   "devDependencies": {
     "eslint": "^6.1.0",
-    "eslint-config-google": "^0.13.0",
+    "eslint-config-google": "^0.14.0",
     "mocha": "^6.1.4",
     "webpack-cli": "^3.3.2",
     "webpack-dev-server": "^3.4.1"
