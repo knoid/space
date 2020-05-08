@@ -26,6 +26,6 @@
     "eslint-config-google": "^0.14.0",
     "mocha": "^7.0.1",
     "webpack-cli": "^3.3.2",
-    "webpack-dev-server": "^3.4.1"
+    "webpack-dev-server": "^3.11.0"
   }
 }
